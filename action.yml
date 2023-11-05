@@ -1,0 +1,12 @@
+name: "Nuki Code Review Action"
+description: "Nuki reviews new pull requests"
+branding:
+  icon: "book-open"
+  color: "blue"
+inputs:
+  OPENAI_API_KEY:
+    description: "OpenAI API Key"
+    required: true
+runs:
+  using: "node20"
+  main: "dist/index.js"
