@@ -33,7 +33,7 @@ const AVATAR =
   }
 
   const client = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: process.env.INPUT_OPENAI_API_KEY,
   });
   const prompt = createPrompt();
   const chatCompletion = await client.chat.completions.create({
