@@ -25,31 +25,12 @@ const AVATAR =
     throw new Error("No repo found");
   }
 
-  const octokit = (github.getOctokit as typeof getOctokit)(process.env.GITHUB_TOKEN!);
+  const diffUrl = `https://patch-diff.githubusercontent.com/raw/${owner}/${repo}/pull/${pull_number}.diff`;
+  const diff = await (await fetch(diffUrl)).text();
 
-  const linesChanged = await octokit.rest.pulls.listFiles({
-    owner,
-    repo,
-    pull_number,
-  });
-
-  const linesChangedNumber = linesChanged.data.reduce(
-    (acc, { changes }) => acc + changes,
-    0,
-  );
-
-  if (linesChangedNumber > 200) {
+  if (diff.length > 200) {
     throw new Error("Too many lines changed. Large PRs are not supported yet.");
   }
-
-  const { data: pullRequest } = await octokit.rest.pulls.get({
-    owner,
-    repo,
-    pull_number,
-    mediaType: {
-      format: "diff",
-    },
-  });
 
   const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -59,7 +40,7 @@ const AVATAR =
     messages: [
       { role: "system", content: prompt },
       // pullRequest is a diff string, but the type definition is wrong
-      { role: "user", content: pullRequest as unknown as string },
+      { role: "user", content: diff },
     ],
     max_tokens: 1024,
     model: "gpt-4-1106-preview",

@@ -31,24 +31,11 @@ const AVATAR = '<img src="https://raw.githubusercontent.com/nukeop/nuclear/56866
     if (!repo) {
         throw new Error("No repo found");
     }
-    const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
-    const linesChanged = yield octokit.rest.pulls.listFiles({
-        owner,
-        repo,
-        pull_number,
-    });
-    const linesChangedNumber = linesChanged.data.reduce((acc, { changes }) => acc + changes, 0);
-    if (linesChangedNumber > 200) {
+    const diffUrl = `https://patch-diff.githubusercontent.com/raw/${owner}/${repo}/pull/${pull_number}.diff`;
+    const diff = yield (yield fetch(diffUrl)).text();
+    if (diff.length > 200) {
         throw new Error("Too many lines changed. Large PRs are not supported yet.");
     }
-    const { data: pullRequest } = yield octokit.rest.pulls.get({
-        owner,
-        repo,
-        pull_number,
-        mediaType: {
-            format: "diff",
-        },
-    });
     const client = new openai_1.default({
         apiKey: process.env.OPENAI_API_KEY,
     });
@@ -57,7 +44,7 @@ const AVATAR = '<img src="https://raw.githubusercontent.com/nukeop/nuclear/56866
         messages: [
             { role: "system", content: prompt },
             // pullRequest is a diff string, but the type definition is wrong
-            { role: "user", content: pullRequest },
+            { role: "user", content: diff },
         ],
         max_tokens: 1024,
         model: "gpt-4-1106-preview",
