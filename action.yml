@@ -7,6 +7,9 @@ inputs:
   OPENAI_API_KEY:
     description: "OpenAI API Key"
     required: true
+  GITHUB_TOKEN:
+    description: "GitHub Token"
+    required: true
 runs:
   using: "node20"
   main: "src/index.js"
