@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
-    "build": "vite build"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "nukeop<12746779+nukeop@users.noreply.github.com>",
@@ -22,9 +22,7 @@
     "husky": "^8.0.3",
     "lint-staged": "^15.0.2",
     "prettier": "^3.0.3",
-    "typescript": "^5.2.2",
-    "vite": "^4.5.0",
-    "vite-plugin-target": "^0.1.1"
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "@actions/core": "^1.10.1",
