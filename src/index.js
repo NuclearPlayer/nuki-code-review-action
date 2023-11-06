@@ -19,7 +19,6 @@ const prompt_1 = require("./prompt");
 const AVATAR = '<img src="https://raw.githubusercontent.com/nukeop/nuclear/568664b782cbc5eff62b5d26113b78bcfaf75b94/packages/app/resources/media/nuki/nuki_teaching.png" width="150" height="150" />';
 (() => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e;
-    console.log(github.context);
     const pull_number = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
     const owner = (_c = (_b = github.context.payload.repository) === null || _b === void 0 ? void 0 : _b.owner) === null || _c === void 0 ? void 0 : _c.login;
     const repo = (_d = github.context.payload.repository) === null || _d === void 0 ? void 0 : _d.name;
@@ -32,8 +31,7 @@ const AVATAR = '<img src="https://raw.githubusercontent.com/nukeop/nuclear/56866
     if (!repo) {
         throw new Error("No repo found");
     }
-    const githubToken = core.getInput("GITHUB_TOKEN");
-    const octokit = github.getOctokit(githubToken);
+    const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
     const linesChanged = yield octokit.rest.pulls.listFiles({
         owner,
         repo,

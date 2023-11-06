@@ -10,7 +10,6 @@ const AVATAR =
   '<img src="https://raw.githubusercontent.com/nukeop/nuclear/568664b782cbc5eff62b5d26113b78bcfaf75b94/packages/app/resources/media/nuki/nuki_teaching.png" width="150" height="150" />';
 
 (async () => {
-  console.log(github.context);
   const pull_number = github.context.payload.pull_request?.number;
   const owner = github.context.payload.repository?.owner?.login;
   const repo = github.context.payload.repository?.name;
@@ -26,8 +25,7 @@ const AVATAR =
     throw new Error("No repo found");
   }
 
-  const githubToken = core.getInput("GITHUB_TOKEN");
-  const octokit = (github.getOctokit as typeof getOctokit)(githubToken);
+  const octokit = (github.getOctokit as typeof getOctokit)(process.env.GITHUB_TOKEN!);
 
   const linesChanged = await octokit.rest.pulls.listFiles({
     owner,
