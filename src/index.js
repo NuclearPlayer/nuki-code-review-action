@@ -12,16 +12,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __importDefault(require("@actions/core"));
-const github_1 = __importDefault(require("@actions/github"));
+const core = require("@actions/core");
+const github = require("@actions/github");
 const openai_1 = __importDefault(require("openai"));
 const prompt_1 = require("./prompt");
 const AVATAR = '<img src="https://raw.githubusercontent.com/nukeop/nuclear/568664b782cbc5eff62b5d26113b78bcfaf75b94/packages/app/resources/media/nuki/nuki_teaching.png" width="150" height="150" />';
 (() => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e;
-    const pull_number = (_a = github_1.default.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
-    const owner = (_c = (_b = github_1.default.context.payload.repository) === null || _b === void 0 ? void 0 : _b.owner) === null || _c === void 0 ? void 0 : _c.login;
-    const repo = (_d = github_1.default.context.payload.repository) === null || _d === void 0 ? void 0 : _d.name;
+    console.log(github.context);
+    const pull_number = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
+    const owner = (_c = (_b = github.context.payload.repository) === null || _b === void 0 ? void 0 : _b.owner) === null || _c === void 0 ? void 0 : _c.login;
+    const repo = (_d = github.context.payload.repository) === null || _d === void 0 ? void 0 : _d.name;
     if (!pull_number) {
         throw new Error("No PR number found");
     }
@@ -31,8 +32,8 @@ const AVATAR = '<img src="https://raw.githubusercontent.com/nukeop/nuclear/56866
     if (!repo) {
         throw new Error("No repo found");
     }
-    const githubToken = core_1.default.getInput("GITHUB_TOKEN");
-    const octokit = github_1.default.getOctokit(githubToken);
+    const githubToken = core.getInput("GITHUB_TOKEN");
+    const octokit = github.getOctokit(githubToken);
     const linesChanged = yield octokit.rest.pulls.listFiles({
         owner,
         repo,
@@ -61,7 +62,7 @@ const AVATAR = '<img src="https://raw.githubusercontent.com/nukeop/nuclear/56866
             { role: "user", content: pullRequest },
         ],
         max_tokens: 1024,
-        model: "gpt-4",
+        model: "gpt-4-1106-preview",
     });
     const reviewContent = (_e = chatCompletion.choices[0].message) === null || _e === void 0 ? void 0 : _e.content;
     console.log(`${AVATAR}\n\n${reviewContent}`);
