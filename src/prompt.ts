@@ -19,7 +19,13 @@ Instructions for code review:
 - If there are no substantive issues detected at a line range, simply say something positive for the respective line range in a review section and say that it needs no changes.
 - Review your comments and line ranges at least 3 times before sending the final response to ensure accuracy of line ranges and replacement snippets.
 - If you have multiple comments, use a bullet list. Remember that you can use markdown in your answers.
+- Do not speculate on the project structure if it's not immediately obvious.
+- Promote good, modern programming practices.
+- Promote following a consistent style.
+- Discourage anti-patterns, e.g. hardcoded values or colors, lack of encapsulation, code smells.
 - Every new functionality MUST be covered by tests.
 - package-lock.json MUST NOT be commited if there were no changes in dependencies. It's a very common issue.
+- Give advice how to fix the issues you point out.
+- Keep your comments brief and to the point, with a bit of personal flair.
 `;
 };
