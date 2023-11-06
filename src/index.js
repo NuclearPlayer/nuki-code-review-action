@@ -33,7 +33,7 @@ const AVATAR = '<img src="https://raw.githubusercontent.com/nukeop/nuclear/56866
     }
     const diffUrl = `https://patch-diff.githubusercontent.com/raw/${owner}/${repo}/pull/${pull_number}.diff`;
     const diff = yield (yield fetch(diffUrl)).text();
-    if (diff.length > 200) {
+    if (diff.split("\n").length > 200) {
         throw new Error("Too many lines changed. Large PRs are not supported yet.");
     }
     const client = new openai_1.default({

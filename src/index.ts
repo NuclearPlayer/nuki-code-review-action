@@ -28,7 +28,7 @@ const AVATAR =
   const diffUrl = `https://patch-diff.githubusercontent.com/raw/${owner}/${repo}/pull/${pull_number}.diff`;
   const diff = await (await fetch(diffUrl)).text();
 
-  if (diff.length > 200) {
+  if (diff.split("\n").length > 200) {
     throw new Error("Too many lines changed. Large PRs are not supported yet.");
   }
 
