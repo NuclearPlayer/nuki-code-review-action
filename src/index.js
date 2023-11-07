@@ -37,7 +37,7 @@ const AVATAR = '<img src="https://raw.githubusercontent.com/nukeop/nuclear/56866
         throw new Error("Too many lines changed. Large PRs are not supported yet.");
     }
     const client = new openai_1.default({
-        apiKey: process.env.OPENAI_API_KEY,
+        apiKey: process.env.INPUT_OPENAI_API_KEY,
     });
     const prompt = (0, prompt_1.createPrompt)();
     const chatCompletion = yield client.chat.completions.create({
