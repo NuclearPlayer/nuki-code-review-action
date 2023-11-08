@@ -7,8 +7,8 @@ inputs:
   OPENAI_API_KEY:
     description: "OpenAI API Key"
     required: true
-  GITHUB_TOKEN:
-    description: "GitHub Token"
+  GITHUB_APP_PRIVATE_KEY:
+    description: "GitHub App Private Key"
     required: true
 runs:
   using: "node20"

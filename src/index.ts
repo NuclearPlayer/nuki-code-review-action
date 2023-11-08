@@ -1,7 +1,5 @@
-const core = require("@actions/core");
-const github = require("@actions/github");
-
-import { getOctokit } from "@actions/github";
+import github from "@actions/github";
+import { App } from "octokit";
 
 import OpenAI from "openai";
 import { createPrompt } from "./prompt";
@@ -47,5 +45,22 @@ const AVATAR =
   });
   const reviewContent = chatCompletion.choices[0].message?.content;
 
-  console.log(`${AVATAR}\n\n${reviewContent}`);
+  const app = new App({
+    appId: "423357",
+    privateKey: process.env.INPUT_GITHUB_APP_PRIVATE_KEY!,
+  });
+
+  const installation = await app.octokit.rest.apps.getRepoInstallation({
+    owner,
+    repo,
+  });
+  const octokit = await app.getInstallationOctokit(installation.data.id);
+  await octokit.rest.issues.createComment({
+    owner,
+    repo,
+    issue_number: pull_number,
+    body: `${AVATAR}\n\n${reviewContent}`!,
+  });
+
+  console.log(reviewContent);
 })();

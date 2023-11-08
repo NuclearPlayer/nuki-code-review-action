@@ -12,16 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const core = require("@actions/core");
-const github = require("@actions/github");
+const github_1 = __importDefault(require("@actions/github"));
+const octokit_1 = require("octokit");
 const openai_1 = __importDefault(require("openai"));
 const prompt_1 = require("./prompt");
 const AVATAR = '<img src="https://raw.githubusercontent.com/nukeop/nuclear/568664b782cbc5eff62b5d26113b78bcfaf75b94/packages/app/resources/media/nuki/nuki_teaching.png" width="150" height="150" />';
 (() => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e;
-    const pull_number = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
-    const owner = (_c = (_b = github.context.payload.repository) === null || _b === void 0 ? void 0 : _b.owner) === null || _c === void 0 ? void 0 : _c.login;
-    const repo = (_d = github.context.payload.repository) === null || _d === void 0 ? void 0 : _d.name;
+    const pull_number = (_a = github_1.default.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
+    const owner = (_c = (_b = github_1.default.context.payload.repository) === null || _b === void 0 ? void 0 : _b.owner) === null || _c === void 0 ? void 0 : _c.login;
+    const repo = (_d = github_1.default.context.payload.repository) === null || _d === void 0 ? void 0 : _d.name;
     if (!pull_number) {
         throw new Error("No PR number found");
     }
@@ -50,5 +50,20 @@ const AVATAR = '<img src="https://raw.githubusercontent.com/nukeop/nuclear/56866
         model: "gpt-4-1106-preview",
     });
     const reviewContent = (_e = chatCompletion.choices[0].message) === null || _e === void 0 ? void 0 : _e.content;
-    console.log(`${AVATAR}\n\n${reviewContent}`);
+    const app = new octokit_1.App({
+        appId: "423357",
+        privateKey: process.env.INPUT_GITHUB_APP_PRIVATE_KEY,
+    });
+    const installation = yield app.octokit.rest.apps.getRepoInstallation({
+        owner,
+        repo,
+    });
+    const octokit = yield app.getInstallationOctokit(installation.data.id);
+    yield octokit.rest.issues.createComment({
+        owner,
+        repo,
+        issue_number: pull_number,
+        body: `${AVATAR}\n\n${reviewContent}`,
+    });
+    console.log(reviewContent);
 }))();
