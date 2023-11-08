@@ -12,16 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const github_1 = __importDefault(require("@actions/github"));
 const octokit_1 = require("octokit");
 const openai_1 = __importDefault(require("openai"));
 const prompt_1 = require("./prompt");
+const github = require("@actions/github");
 const AVATAR = '<img src="https://raw.githubusercontent.com/nukeop/nuclear/568664b782cbc5eff62b5d26113b78bcfaf75b94/packages/app/resources/media/nuki/nuki_teaching.png" width="150" height="150" />';
 (() => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e;
-    const pull_number = (_a = github_1.default.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
-    const owner = (_c = (_b = github_1.default.context.payload.repository) === null || _b === void 0 ? void 0 : _b.owner) === null || _c === void 0 ? void 0 : _c.login;
-    const repo = (_d = github_1.default.context.payload.repository) === null || _d === void 0 ? void 0 : _d.name;
+    const pull_number = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
+    const owner = (_c = (_b = github.context.payload.repository) === null || _b === void 0 ? void 0 : _b.owner) === null || _c === void 0 ? void 0 : _c.login;
+    const repo = (_d = github.context.payload.repository) === null || _d === void 0 ? void 0 : _d.name;
     if (!pull_number) {
         throw new Error("No PR number found");
     }

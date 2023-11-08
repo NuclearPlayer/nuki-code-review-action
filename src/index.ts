@@ -1,8 +1,9 @@
-import github from "@actions/github";
 import { App } from "octokit";
 
 import OpenAI from "openai";
 import { createPrompt } from "./prompt";
+
+const github = require("@actions/github");
 
 const AVATAR =
   '<img src="https://raw.githubusercontent.com/nukeop/nuclear/568664b782cbc5eff62b5d26113b78bcfaf75b94/packages/app/resources/media/nuki/nuki_teaching.png" width="150" height="150" />';
